@@ -157,33 +157,25 @@ public class BlurDialogEngine {
      */
     public void onAttach(Activity activity) {
         mHoldingActivity = activity;
-    }
-
-    /**
-     * Resume the engine.
-     *
-     * @param retainedInstance use getRetainInstance.
-     */
-    public void onResume(boolean retainedInstance) {
-        if (mBlurredBackgroundView == null || retainedInstance) {
+        if (mBlurredBackgroundView == null) {
             if (mHoldingActivity.getWindow().getDecorView().isShown()) {
                 mBluringTask = new BlurAsyncTask();
                 mBluringTask.execute();
             } else {
                 mHoldingActivity.getWindow().getDecorView().getViewTreeObserver().addOnPreDrawListener(
-                    new ViewTreeObserver.OnPreDrawListener() {
-                        @Override
-                        public boolean onPreDraw() {
-                            // dialog can have been closed before being drawn
-                            if (mHoldingActivity != null) {
-                                mHoldingActivity.getWindow().getDecorView()
-                                    .getViewTreeObserver().removeOnPreDrawListener(this);
-                                mBluringTask = new BlurAsyncTask();
-                                mBluringTask.execute();
+                        new ViewTreeObserver.OnPreDrawListener() {
+                            @Override
+                            public boolean onPreDraw() {
+                                // dialog can have been closed before being drawn
+                                if (mHoldingActivity != null) {
+                                    mHoldingActivity.getWindow().getDecorView()
+                                            .getViewTreeObserver().removeOnPreDrawListener(this);
+                                    mBluringTask = new BlurAsyncTask();
+                                    mBluringTask.execute();
+                                }
+                                return true;
                             }
-                            return true;
                         }
-                    }
                 );
             }
         }
@@ -382,7 +374,7 @@ public class BlurDialogEngine {
                 //add offset as top margin since actionBar height must also considered when we display
                 // the blurred background. Don't want to draw on the actionBar.
                 mBlurredBackgroundLayoutParams.setMargins(0, actionBarHeight, 0, 0);
-                mBlurredBackgroundLayoutParams.gravity = Gravity.TOP;
+                mBlurredBackgroundLayoutParams.gravity = Gravity.BOTTOM;
             }
         } catch (NoClassDefFoundError e) {
             // no dependency to appcompat, that means no additional top offset due to actionBar.
@@ -513,10 +505,8 @@ public class BlurDialogEngine {
     }
 
     private boolean hasNavigationBar(Activity holdingActivity) {
-        boolean hasMenuKey = ViewConfiguration.get(holdingActivity).hasPermanentMenuKey();
-        boolean hasBackKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK);
-
-        return !hasMenuKey && !hasBackKey;
+        int id = holdingActivity.getResources().getIdentifier("config_showNavigationBar", "bool", "android");
+        return id > 0 && holdingActivity.getResources().getBoolean(id);
     }
 
 

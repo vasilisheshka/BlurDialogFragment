@@ -105,8 +105,6 @@ public class SampleSupportDialogFragment extends SupportBlurDialogFragment {
 
     @Override
     public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
         Bundle args = getArguments();
         mRadius = args.getInt(BUNDLE_KEY_BLUR_RADIUS);
         mDownScaleFactor = args.getFloat(BUNDLE_KEY_DOWN_SCALE_FACTOR);
@@ -114,6 +112,7 @@ public class SampleSupportDialogFragment extends SupportBlurDialogFragment {
         mDebug = args.getBoolean(BUNDLE_KEY_DEBUG);
         mBlurredActionBar = args.getBoolean(BUNDLE_KEY_BLURRED_ACTION_BAR);
         mUseRenderScript = args.getBoolean(BUNDLE_KEY_USE_RENDERSCRIPT);
+        super.onAttach(activity);
     }
 
     @Override
