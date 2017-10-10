@@ -201,28 +201,7 @@ public class BlurDialogEngine {
             mBluringTask.cancel(true);
         }
         if (mBlurredBackgroundView != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                mBlurredBackgroundView
-                    .animate()
-                    .alpha(0f)
-                    .setDuration(mAnimationDuration)
-                    .setInterpolator(new AccelerateInterpolator())
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            removeBlurredView();
-                        }
-
-                        @Override
-                        public void onAnimationCancel(Animator animation) {
-                            super.onAnimationCancel(animation);
-                            removeBlurredView();
-                        }
-                    }).start();
-            } else {
                 removeBlurredView();
-            }
         }
     }
 
@@ -642,16 +621,6 @@ public class BlurDialogEngine {
                 mBlurredBackgroundView,
                 mBlurredBackgroundLayoutParams
             );
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
-                mBlurredBackgroundView.setAlpha(0f);
-                mBlurredBackgroundView
-                    .animate()
-                    .alpha(1f)
-                    .setDuration(mAnimationDuration)
-                    .setInterpolator(new LinearInterpolator())
-                    .start();
-            }
             mBackgroundView = null;
             mBackground = null;
         }

@@ -82,9 +82,8 @@ public abstract class SupportBlurDialogFragment extends DialogFragment {
 
             // add default fade to the dialog if no window animation has been set.
             int currentAnimation = dialog.getWindow().getAttributes().windowAnimations;
-            if (currentAnimation == 0) {
-                dialog.getWindow().getAttributes().windowAnimations
-                    = R.style.BlurDialogFragment_Default_Animation;
+            if (currentAnimation != 0) {
+                dialog.getWindow().getAttributes().windowAnimations = 0;
             }
         }
         super.onStart();
